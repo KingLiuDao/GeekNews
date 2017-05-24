@@ -33,12 +33,14 @@ import com.codeest.geeknews.model.http.response.WXHttpResponse;
 
 import java.util.List;
 
-import rx.Observable;
+import javax.inject.Inject;
+
+import io.reactivex.Flowable;
 
 /**
  * Created by codeest on 2016/8/3.
  */
-public class RetrofitHelper {
+public class RetrofitHelper implements HttpHelper {
 
     private ZhihuApis mZhihuApiService;
     private GankApis mGankApiService;
@@ -47,6 +49,7 @@ public class RetrofitHelper {
     private GoldApis mGoldApiService;
     private VtexApis mVtexApiService;
 
+    @Inject
     public RetrofitHelper(ZhihuApis zhihuApiService, GankApis gankApiService, WeChatApis wechatApiService,
                           MyApis myApiService, GoldApis goldApiService, VtexApis vtexApiService) {
         this.mZhihuApiService = zhihuApiService;
@@ -57,106 +60,131 @@ public class RetrofitHelper {
         this.mVtexApiService = vtexApiService;
     }
 
-    public Observable<DailyListBean> fetchDailyListInfo() {
+    @Override
+    public Flowable<DailyListBean> fetchDailyListInfo() {
         return mZhihuApiService.getDailyList();
     }
 
-    public Observable<DailyBeforeListBean> fetchDailyBeforeListInfo(String date) {
+    @Override
+    public Flowable<DailyBeforeListBean> fetchDailyBeforeListInfo(String date) {
         return mZhihuApiService.getDailyBeforeList(date);
     }
 
-    public Observable<ThemeListBean> fetchDailyThemeListInfo() {
+    @Override
+    public Flowable<ThemeListBean> fetchDailyThemeListInfo() {
         return mZhihuApiService.getThemeList();
     }
 
-    public Observable<ThemeChildListBean> fetchThemeChildListInfo(int id) {
+    @Override
+    public Flowable<ThemeChildListBean> fetchThemeChildListInfo(int id) {
         return mZhihuApiService.getThemeChildList(id);
     }
 
-    public Observable<SectionListBean> fetchSectionListInfo() {
+    @Override
+    public Flowable<SectionListBean> fetchSectionListInfo() {
         return mZhihuApiService.getSectionList();
     }
 
-    public Observable<SectionChildListBean> fetchSectionChildListInfo(int id) {
+    @Override
+    public Flowable<SectionChildListBean> fetchSectionChildListInfo(int id) {
         return mZhihuApiService.getSectionChildList(id);
     }
 
-    public Observable<ZhihuDetailBean> fetchDetailInfo(int id) {
+    @Override
+    public Flowable<ZhihuDetailBean> fetchDetailInfo(int id) {
         return mZhihuApiService.getDetailInfo(id);
     }
 
-    public Observable<DetailExtraBean> fetchDetailExtraInfo(int id) {
+    @Override
+    public Flowable<DetailExtraBean> fetchDetailExtraInfo(int id) {
         return mZhihuApiService.getDetailExtraInfo(id);
     }
 
-    public Observable<WelcomeBean> fetchWelcomeInfo(String res) {
+    @Override
+    public Flowable<WelcomeBean> fetchWelcomeInfo(String res) {
         return mZhihuApiService.getWelcomeInfo(res);
     }
 
-    public Observable<CommentBean> fetchLongCommentInfo(int id) {
+    @Override
+    public Flowable<CommentBean> fetchLongCommentInfo(int id) {
         return mZhihuApiService.getLongCommentInfo(id);
     }
 
-    public Observable<CommentBean> fetchShortCommentInfo(int id) {
+    @Override
+    public Flowable<CommentBean> fetchShortCommentInfo(int id) {
         return mZhihuApiService.getShortCommentInfo(id);
     }
 
-    public Observable<HotListBean> fetchHotListInfo() {
+    @Override
+    public Flowable<HotListBean> fetchHotListInfo() {
         return mZhihuApiService.getHotList();
     }
 
-    public Observable<GankHttpResponse<List<GankItemBean>>> fetchTechList(String tech, int num, int page) {
+    @Override
+    public Flowable<GankHttpResponse<List<GankItemBean>>> fetchTechList(String tech, int num, int page) {
         return mGankApiService.getTechList(tech, num, page);
     }
 
-    public Observable<GankHttpResponse<List<GankItemBean>>> fetchGirlList(int num, int page) {
+    @Override
+    public Flowable<GankHttpResponse<List<GankItemBean>>> fetchGirlList(int num, int page) {
         return mGankApiService.getGirlList(num, page);
     }
 
-    public Observable<GankHttpResponse<List<GankItemBean>>> fetchRandomGirl(int num) {
+    @Override
+    public Flowable<GankHttpResponse<List<GankItemBean>>> fetchRandomGirl(int num) {
         return mGankApiService.getRandomGirl(num);
     }
 
-    public Observable<GankHttpResponse<List<GankSearchItemBean>>> fetchGankSearchList(String query,String type,int num,int page) {
+    @Override
+    public Flowable<GankHttpResponse<List<GankSearchItemBean>>> fetchGankSearchList(String query,String type,int num,int page) {
         return mGankApiService.getSearchList(query,type,num,page);
     }
 
-    public Observable<WXHttpResponse<List<WXItemBean>>> fetchWechatListInfo(int num, int page) {
+    @Override
+    public Flowable<WXHttpResponse<List<WXItemBean>>> fetchWechatListInfo(int num, int page) {
         return mWechatApiService.getWXHot(Constants.KEY_API, num, page);
     }
 
-    public Observable<WXHttpResponse<List<WXItemBean>>> fetchWechatSearchListInfo(int num, int page, String word) {
+    @Override
+    public Flowable<WXHttpResponse<List<WXItemBean>>> fetchWechatSearchListInfo(int num, int page, String word) {
         return mWechatApiService.getWXHotSearch(Constants.KEY_API, num, page, word);
     }
 
-    public Observable<MyHttpResponse<VersionBean>> fetchVersionInfo() {
+    @Override
+    public Flowable<MyHttpResponse<VersionBean>> fetchVersionInfo() {
         return mMyApiService.getVersionInfo();
     }
 
-    public Observable<GoldHttpResponse<List<GoldListBean>>> fetchGoldList(String type, int num, int page) {
+    @Override
+    public Flowable<GoldHttpResponse<List<GoldListBean>>> fetchGoldList(String type, int num, int page) {
         return mGoldApiService.getGoldList(Constants.LEANCLOUD_ID, Constants.LEANCLOUD_SIGN,
                 "{\"category\":\"" + type + "\"}", "-createdAt", "user,user.installation", num, page * num);
     }
 
-    public Observable<GoldHttpResponse<List<GoldListBean>>> fetchGoldHotList(String type, String dataTime, int limit) {
+    @Override
+    public Flowable<GoldHttpResponse<List<GoldListBean>>> fetchGoldHotList(String type, String dataTime, int limit) {
         return mGoldApiService.getGoldHot(Constants.LEANCLOUD_ID, Constants.LEANCLOUD_SIGN,
                 "{\"category\":\"" + type + "\",\"createdAt\":{\"$gt\":{\"__type\":\"Date\",\"iso\":\"" + dataTime + "T00:00:00.000Z\"}},\"objectId\":{\"$nin\":[\"58362f160ce463005890753e\",\"583659fcc59e0d005775cc8c\",\"5836b7358ac2470065d3df62\"]}}",
                 "-hotIndex", "user,user.installation", limit);
     }
 
-    public Observable<NodeBean> fetchNodeInfo(String name) {
+    @Override
+    public Flowable<NodeBean> fetchNodeInfo(String name) {
         return mVtexApiService.getNodeInfo(name);
     }
 
-    public Observable<List<NodeListBean>> fetchTopicList(String name) {
+    @Override
+    public Flowable<List<NodeListBean>> fetchTopicList(String name) {
         return mVtexApiService.getTopicList(name);
     }
 
-    public Observable<List<NodeListBean>> fetchTopicInfo(String id) {
+    @Override
+    public Flowable<List<NodeListBean>> fetchTopicInfo(String id) {
         return mVtexApiService.getTopicInfo(id);
     }
 
-    public Observable<List<RepliesListBean>> fetchRepliesList(String id){
+    @Override
+    public Flowable<List<RepliesListBean>> fetchRepliesList(String id){
         return mVtexApiService.getRepliesList(id);
     }
 }
